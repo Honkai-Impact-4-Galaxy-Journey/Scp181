@@ -130,6 +130,7 @@ namespace Scp181
                 __result += 20;
             }
         }
+
     }
     [CommandHandler(typeof(RemoteAdminCommandHandler))]
     public class Init181 : ICommand
