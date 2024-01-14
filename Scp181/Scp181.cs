@@ -120,6 +120,7 @@ namespace Scp181
         }
         
     }
+    [HarmonyPatch]
     public class Patch
     {
         [HarmonyPatch(typeof(HealthStat), nameof(HealthStat.MaxValue), MethodType.Getter)]
