@@ -20,7 +20,7 @@ namespace Scp181
 {
     public class Scp181
     {
-        public static List<string> userids;
+        public static List<string> userids = new List<string>();
         public static Scp181 instance;
         public Harmony Harmony { get; private set; }
         public static List<ItemType> cards = new List<ItemType> 
@@ -125,7 +125,7 @@ namespace Scp181
     public class Patch
     {
         [HarmonyPatch(typeof(HealthStat), nameof(HealthStat.MaxValue), MethodType.Getter)]
-        public static void Postfix(HealthStat __instance, ref int __result)
+        public static void Postfix(HealthStat __instance, ref float __result)
         {
             if (Scp181.userids.Contains(__instance.Hub.authManager.UserId))
             {
