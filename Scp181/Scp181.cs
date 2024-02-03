@@ -20,12 +20,11 @@ namespace Scp181
 {
     public class Scp181
     {
-        public static string userid;
+        public static List<string> userids;
         public static Scp181 instance;
         public Harmony Harmony { get; private set; }
         public static List<ItemType> cards = new List<ItemType> 
         {
-            ItemType.KeycardScientist,
             ItemType.KeycardResearchCoordinator,
             ItemType.KeycardFacilityManager,
             ItemType.KeycardGuard,
@@ -49,7 +48,7 @@ namespace Scp181
         public bool OnDoorInteracting(PlayerInteractDoorEvent ev)
         {
             if (ev.Door.ActiveLocks > 0) return true;
-            if (ev.Player.UserId == userid)
+            if (userids.Contains(ev.Player.UserId))
             {
                 Random random = new Random();
                 int rnd = random.Next(1, 101);
@@ -73,9 +72,11 @@ namespace Scp181
         [PluginEvent(PluginAPI.Enums.ServerEventType.PlayerDeath)]
         public void OnDeath(PlayerDeathEvent ev)
         {
-            if (ev.Player.UserId == userid)
+            if (userids.Contains(ev.Player.UserId))
             {
-                userid = "";
+                userids.Remove(ev.Player.UserId);
+                ev.Player.CustomInfo = "";
+                ev.Player.ReferenceHub.serverRoles.SetText("");
                 string text = "SCP 1 8 1 ";
                 DamageHandlerBase db = ev.DamageHandler;
                 if (db is WarheadDamageHandler)
@@ -110,13 +111,13 @@ namespace Scp181
         public void Init181(string userid)
         {
             Player player = Player.Get(userid);
-            Scp181.userid = userid;
+            userids.Add(userid);
             player.SendBroadcast("<size=24>你是181</size>", 5, shouldClearPrevious: true);
             player.AddItem(cards.RandomItem());
             player.Health = 120;
             player.CustomInfo = "SCP181";
             player.ReferenceHub.serverRoles.SetText("SCP181");
-            player.ReferenceHub.serverRoles.SetColor("red");
+            player.ReferenceHub.serverRoles.SetColor("yellow");
         }
         
     }
@@ -126,7 +127,7 @@ namespace Scp181
         [HarmonyPatch(typeof(HealthStat), nameof(HealthStat.MaxValue), MethodType.Getter)]
         public static void Postfix(HealthStat __instance, ref int __result)
         {
-            if (__instance.Hub.authManager.UserId == Scp181.userid)
+            if (Scp181.userids.Contains(__instance.Hub.authManager.UserId))
             {
                 __result += 20;
             }
@@ -144,7 +145,7 @@ namespace Scp181
         public bool Execute(ArraySegment<string> arguments, ICommandSender sender, out string response)
         {
             Scp181.instance.Init181(Player.Get((sender as CommandSender).SenderId).UserId);
-            response = $"{Scp181.userid}?";
+            response = $"Done!";
             return true;
         }
     }
