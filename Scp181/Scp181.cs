@@ -18,10 +18,15 @@ using Respawning.NamingRules;
 
 namespace Scp181
 {
+    public class Config
+    {
+        public int num;
+    }
     public class Scp181
     {
         public static List<string> userids = new List<string>();
         public static Scp181 instance;
+        [PluginConfig] public Config config;
         public Harmony Harmony { get; private set; }
         public static List<ItemType> cards = new List<ItemType> 
         {
@@ -52,7 +57,7 @@ namespace Scp181
             {
                 Random random = new Random();
                 int rnd = random.Next(1, 101);
-                if (rnd < 31 || ev.CanOpen)
+                if (rnd <= config.num || ev.CanOpen)
                 {
                     DoorVariant door = ev.Door;
                     door.NetworkTargetState = !door.TargetState;
@@ -112,7 +117,7 @@ namespace Scp181
         {
             Player player = Player.Get(userid);
             userids.Add(userid);
-            player.SendBroadcast("<size=24>你是181</size>", 5, shouldClearPrevious: true);
+            player.SendBroadcast("<size=28>你是181</size>", 5, shouldClearPrevious: true);
             player.AddItem(cards.RandomItem());
             player.Health = 120;
             player.CustomInfo = "SCP181";
