@@ -83,7 +83,9 @@ jobs:
     - name: Execute unit tests
       run: dotnet test
 
-    - run: dotnet build
+    - run: |
+        msbuild -t:restore
+        msbuild /p:Configuration=Debug /p:Platform="x64"
 
     - uses: actions/upload-artifact@v4
       with:
