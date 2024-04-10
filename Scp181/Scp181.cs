@@ -47,6 +47,7 @@ namespace Scp181
         [PluginEvent(PluginAPI.Enums.ServerEventType.RoundStart)]
         public void OnRoundStart(RoundStartEvent ev)
         {
+            userids.Clear();
             Timing.CallDelayed(2, () => { Init181(Player.GetPlayers().FindAll(p => p.Role == PlayerRoles.RoleTypeId.ClassD).RandomItem().UserId); } );
         }
         [PluginEvent(PluginAPI.Enums.ServerEventType.PlayerInteractDoor)]
