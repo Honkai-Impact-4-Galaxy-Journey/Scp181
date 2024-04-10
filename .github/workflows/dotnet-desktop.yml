@@ -89,5 +89,5 @@ jobs:
 
     - uses: actions/upload-artifact@v4
       with:
-          path: D:\a\Scp181\Scp181\Scp181\bin\Debug\Scp181.dll
+          path: D:\a\Scp181\Scp181\Scp181\bin\x64\Debug\Scp181.dll
           name: Scp181.dll
